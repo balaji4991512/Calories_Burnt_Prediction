@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calories Burnt Prediction</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Calories Burnt Prediction</h1>
+    <p>Submit exercise details to predict calories burnt.</p>
+
+    <form action="/predict_form" method="POST">
+      <div class="form-group">
+        <label>Gender:</label>
+        <select name="Gender">
+          <option value="0">Male</option>
+          <option value="1">Female</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Age:</label>
+        <input type="number" name="Age" step="1" required>
+      </div>
+
+      <div class="form-group">
+        <label>Height (cm):</label>
+        <input type="number" name="Height" step="0.1" required>
+      </div>
+
+      <div class="form-group">
+        <label>Weight (kg):</label>
+        <input type="number" name="Weight" step="0.1" required>
+      </div>
+
+      <div class="form-group">
+        <label>Duration (minutes):</label>
+        <input type="number" name="Duration" step="0.1" required>
+      </div>
+
+      <div class="form-group">
+        <label>Heart Rate:</label>
+        <input type="number" name="Heart_Rate" step="0.1" required>
+      </div>
+
+      <div class="form-group">
+        <label>Body Temperature (°C):</label>
+        <input type="number" name="Body_Temp" step="0.1" required>
+      </div>
+
+      <button type="submit">Predict Calories</button>
+    </form>
+
+    {% if prediction %}
+      <div class="result">
+        <h2>Predicted Calories Burnt: {{ prediction }} kcal</h2>
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
