@@ -56,7 +56,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "Docker image pushed successfully!"
 
-    Continuous-Deployment:
+  Continuous-Deployment:
     name: Continuous Deployment
     needs: build-and-push-ecr-image
     runs-on: self-hosted
@@ -108,10 +108,12 @@ jobs:
 
       - name: Verify container is running (health check)
         run: |
+          echo "Waiting for app to start..."
           sleep 10
           docker ps
           curl -I http://localhost:8080 || true
 
-      - name: Clean old images and containers
+      - name: Clean old images and unused containers
         run: |
+          echo "Cleaning up old Docker images and containers..."
           docker system prune -f
