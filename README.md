@@ -131,7 +131,7 @@ This approach ensures proper separation between training, tuning, and evaluation
 3. Execute the main script:
 
    ```bash
-   python project_calories_burnt_prediction.py
+   python calories_burnt_prediction.py
    ```
 4. Follow the printed logs and outputs:
 
