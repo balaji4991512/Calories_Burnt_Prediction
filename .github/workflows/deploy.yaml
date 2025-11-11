@@ -56,7 +56,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "Docker image pushed successfully!"
 
-  Continuous-Deployment:
+    Continuous-Deployment:
     name: Continuous Deployment
     needs: build-and-push-ecr-image
     runs-on: self-hosted
@@ -83,6 +83,19 @@ jobs:
       - name: Stop and remove old container if running
         run: |
           docker ps -q --filter "name=calories-api" | grep -q . && docker stop calories-api && docker rm -fv calories-api || true
+          echo "Waiting for port cleanup..."
+          sleep 5
+
+      - name: Free port 8080 if occupied
+        run: |
+          PORT_IN_USE=$(docker ps --filter "publish=8080" --format "{{.Names}}")
+          if [ -n "$PORT_IN_USE" ]; then
+            echo "Port 8080 is currently in use by container: $PORT_IN_USE"
+            docker stop $PORT_IN_USE
+            docker rm -fv $PORT_IN_USE
+          else
+            echo "Port 8080 is free to use."
+          fi
 
       - name: Run latest Docker container
         run: |
@@ -99,7 +112,6 @@ jobs:
           docker ps
           curl -I http://localhost:8080 || true
 
-      - name: Clean up old images and unused containers
+      - name: Clean old images and containers
         run: |
-          echo "Cleaning old Docker resources..."
           docker system prune -f
